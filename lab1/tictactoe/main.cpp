@@ -1,15 +1,27 @@
 #include "TicTacToe.hpp"
 #include "../cli/Input.hpp"
 #include <fstream>
+#include <iomanip>
+#include <string>
 
 using ppois::TicTacToe;
 namespace {
-void display(const TicTacToe& game) {
+void display_board(const TicTacToe& game) {
+    const auto label_width = static_cast<int>(std::to_string(game.size()).size());
+    const auto cell_width = label_width + 1;
+    std::cout << std::setw(label_width + 2) << "";
+    for (std::size_t column = 0; column < game.size(); ++column)
+        std::cout << std::setw(cell_width) << column + 1;
+    std::cout << '\n';
     for (std::size_t row = 0; row < game.size(); ++row) {
+        std::cout << std::setw(label_width) << row + 1 << " |";
         for (std::size_t column = 0; column < game.size(); ++column)
-            std::cout << game[row * game.size() + column] << ' ';
+            std::cout << std::setw(cell_width) << game[row * game.size() + column];
         std::cout << '\n';
     }
+}
+void display(const TicTacToe& game) {
+    display_board(game);
     if (game.winner() != '.') std::cout << "Победитель: " << game.winner() << '\n';
     else if (game.draw()) std::cout << "Ничья\n";
     else std::cout << "Ходит: " << game.current_player() << '\n';
