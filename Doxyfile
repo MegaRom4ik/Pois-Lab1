@@ -1,0 +1,8 @@
+PROJECT_NAME = "PPOIS Lab 1: Vector and TicTacToe"
+OUTPUT_DIRECTORY = build/docs
+INPUT = lab1/vector/Vector3.hpp lab1/tictactoe/TicTacToe.hpp
+EXTRACT_ALL = YES
+GENERATE_HTML = YES
+GENERATE_LATEX = NO
+QUIET = YES
+WARN_IF_UNDOCUMENTED = NO
