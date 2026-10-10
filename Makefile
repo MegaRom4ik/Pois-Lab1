@@ -7,6 +7,7 @@ LLVM_COV = $(shell xcrun --find llvm-cov)
 LLVM_PROFDATA = $(shell xcrun --find llvm-profdata)
 endif
 DOMAIN = lab1/vector/Vector3.cpp lab1/tictactoe/TicTacToe.cpp
+TEST_SOURCES = lab1/tests/vector_tests.cpp lab1/tests/tictactoe_tests.cpp
 HEADERS = lab1/vector/Vector3.hpp lab1/tictactoe/TicTacToe.hpp
 LLVM_COV ?= llvm-cov
 LLVM_PROFDATA ?= llvm-profdata
@@ -26,14 +27,14 @@ build/tictactoe_cli: lab1/tictactoe/main.cpp lab1/tictactoe/TicTacToe.cpp $(HEAD
 build/doctest.h: | build
 	curl --fail --location --retry 3 https://raw.githubusercontent.com/doctest/doctest/v2.4.11/doctest/doctest.h -o $@
 
-build/tests: lab1/tests/tests.cpp $(DOMAIN) $(HEADERS) build/doctest.h
-	$(CXX) $(CXXFLAGS) -Ibuild lab1/tests/tests.cpp $(DOMAIN) -o $@
+build/tests: $(TEST_SOURCES) $(DOMAIN) $(HEADERS) build/doctest.h
+	$(CXX) $(CXXFLAGS) -Ibuild $(TEST_SOURCES) $(DOMAIN) -o $@
 
 test: build/tests
 	./build/tests
 
-build/coverage_tests: lab1/tests/tests.cpp $(DOMAIN) $(HEADERS) build/doctest.h
-	$(CXX) $(CXXFLAGS) -O0 -g -fprofile-instr-generate -fcoverage-mapping -Ibuild lab1/tests/tests.cpp $(DOMAIN) -o $@
+build/coverage_tests: $(TEST_SOURCES) $(DOMAIN) $(HEADERS) build/doctest.h
+	$(CXX) $(CXXFLAGS) -O0 -g -fprofile-instr-generate -fcoverage-mapping -Ibuild $(TEST_SOURCES) $(DOMAIN) -o $@
 
 coverage: build/coverage_tests
 	LLVM_PROFILE_FILE=build/tests.profraw ./build/coverage_tests
